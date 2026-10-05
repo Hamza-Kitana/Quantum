@@ -1,0 +1,15 @@
+{
+  "name": "Quantum — Software, AI, Arduino & Tech Training",
+  "short_name": "Quantum",
+  "description": "Software, AI, Arduino hardware and hands-on tech education.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080a18",
+  "theme_color": "#080a18",
+  "icons": [
+    { "src": "/icon-192.png?v=2", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png?v=2", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
