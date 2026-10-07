@@ -27,9 +27,9 @@ const en = {
     cta: "Start a project",
     cta2: "Explore",
     stats: [
-      { n: 500, s: "+", l: "Students trained" },
       { n: 17, s: "", l: "Courses" },
-      { n: 20, s: "+", l: "Projects" },
+      { n: 7, s: "", l: "Learning tracks" },
+      { n: 4, s: "", l: "Disciplines" },
     ],
   },
   about: {
@@ -76,7 +76,7 @@ const en = {
           k: "events",
           cat: "Events",
           t: "Hackathon Night",
-          d: "48 hours, one team, one shipped project — our termly hackathon tradition.",
+          d: "One team, one idea, one shipped project — built together in a single sprint.",
         },
         {
           k: "arduino",
@@ -137,8 +137,8 @@ const en = {
         code: [
           "GET /api/insights",
           "→ 200 OK",
-          "{ revenue: '+38%',",
-          "  users: 12480 }",
+          "{ orders: [...],",
+          "  status: 'live' }",
           "// realtime ✓",
         ],
       },
@@ -567,7 +567,7 @@ const en = {
         name: "Smart Greenhouse",
         tag: "IoT · Arduino",
         meta: "2025 · Jordan Valley",
-        desc: "Soil and climate sensors that water and ventilate automatically — cutting water use by 35%.",
+        desc: "Soil and climate sensors that water and ventilate the greenhouse automatically.",
       },
       {
         k: "clinic",
@@ -595,7 +595,7 @@ const en = {
         name: "Line-Follower Robots",
         tag: "Education",
         meta: "2025 · Zarqa",
-        desc: "A school robotics program — 40 students built and raced their own robots.",
+        desc: "A school robotics program where students built and raced their own robots.",
       },
     ],
     student: {
@@ -666,26 +666,18 @@ const en = {
       {
         t: "Industry Mentors",
         d: "Learn directly from engineers and researchers actively shipping in AI, XR and robotics today.",
-        n: 15,
-        s: "+",
       },
       {
         t: "Real Hardware Labs",
         d: "Work with production-grade devices, headsets, sensors and microcontrollers — not simulations.",
-        n: 60,
-        s: "+",
       },
       {
         t: "Living Curriculum",
         d: "Course content is reviewed quarterly to track the pace of change in emerging technology.",
-        n: 4,
-        s: "×",
       },
       {
         t: "Career Acceleration",
         d: "Portfolio reviews, mock interviews and a direct network into hiring partners worldwide.",
-        n: 95,
-        s: "%",
       },
     ],
   },
@@ -750,12 +742,12 @@ const en = {
     },
     numbers: {
       kicker: "BY THE NUMBERS",
-      title: "Six years of signal.",
+      title: "Quantum at a glance.",
       items: [
-        { n: 500, s: "+", l: "Students trained" },
         { n: 17, s: "", l: "Courses" },
-        { n: 20, s: "+", l: "Projects" },
-        { n: 95, s: "%", l: "Student satisfaction" },
+        { n: 7, s: "", l: "Learning tracks" },
+        { n: 13, s: "", l: "Industry tools" },
+        { n: 4, s: "", l: "Disciplines under one roof" },
       ],
     },
     voices: {
@@ -831,8 +823,8 @@ const en = {
       blurb: "Our story, vision and the reasons people work with us.",
       facts: [
         { n: 4, s: "", l: "Disciplines under one roof" },
-        { n: 6, s: "+", l: "Years of building" },
-        { n: 15, s: "+", l: "Engineers & trainers" },
+        { n: 17, s: "", l: "Courses" },
+        { n: 7, s: "", l: "Learning tracks" },
       ],
     },
     software: {
@@ -840,9 +832,8 @@ const en = {
       sub: "Websites, apps and custom systems — engineered for speed and built to last.",
       blurb: "Web, mobile, custom systems, dashboards and APIs.",
       facts: [
-        { n: 70, s: "+", l: "Apps & sites launched" },
-        { n: 99, s: "%", l: "Uptime on hosted projects" },
         { n: 4, s: "", l: "Core service lines" },
+        { n: 5, s: "", l: "Steps from idea to launch" },
       ],
     },
     ai: {
@@ -850,9 +841,8 @@ const en = {
       sub: "Chatbots, computer vision and prediction — practical intelligence for real problems.",
       blurb: "Chatbots, vision, prediction, automation and edge AI.",
       facts: [
-        { n: 25, s: "+", l: "AI models deployed" },
         { n: 5, s: "", l: "AI capabilities" },
-        { n: 24, s: "/7", l: "Assistants always on" },
+        { n: 2, s: "", l: "AI & ML courses" },
       ],
     },
     arduino: {
@@ -860,8 +850,8 @@ const en = {
       sub: "Boards, kits, sensors and AI modules — come see them, ask about them, build with them.",
       blurb: "Boards, kits, sensors and AI modules in store.",
       facts: [
-        { n: 60, s: "+", l: "Items in stock" },
         { n: 24, s: "", l: "Component types" },
+        { n: 4, s: "", l: "Component categories" },
         { n: 4, s: "", l: "Featured kits" },
       ],
     },
@@ -870,9 +860,9 @@ const en = {
       sub: "A clear path from your first line of code to your own smart device.",
       blurb: "17 courses in AI, XR, games, Arduino, programming, web and security.",
       facts: [
-        { n: 500, s: "+", l: "Students trained" },
         { n: 17, s: "", l: "Courses" },
         { n: 7, s: "", l: "Learning tracks" },
+        { n: 13, s: "", l: "Industry tools" },
       ],
     },
     projects: {
@@ -880,20 +870,15 @@ const en = {
       sub: "Real systems running in farms, clinics, shops and schools across Jordan.",
       blurb: "Real builds for farms, clinics, shops and schools.",
       facts: [
-        { n: 20, s: "+", l: "Projects" },
-        { n: 5, s: "", l: "Cities served" },
-        { n: 35, s: "%", l: "Water saved by one build" },
+        { n: 5, s: "", l: "Featured builds" },
+        { n: 7, s: "", l: "Student projects" },
       ],
     },
     contact: {
       title: "Let's talk.",
       sub: "WhatsApp, call, email or drop by the lab — we reply fast.",
       blurb: "WhatsApp, phone, email, Instagram and location.",
-      facts: [
-        { n: 1, s: "h", l: "Typical reply time" },
-        { n: 7, s: "", l: "Days a week on WhatsApp" },
-        { n: 95, s: "%", l: "Student satisfaction" },
-      ],
+      facts: [{ n: 4, s: "", l: "Ways to reach us" }],
     },
   },
   footer: {
@@ -924,9 +909,9 @@ const ar: typeof en = {
     cta: "ابدأ مشروعك",
     cta2: "اكتشف المزيد",
     stats: [
-      { n: 500, s: "+", l: "متدرب" },
       { n: 17, s: "", l: "دورة" },
-      { n: 20, s: "+", l: "مشروع" },
+      { n: 7, s: "", l: "مسارات تعليمية" },
+      { n: 4, s: "", l: "تخصصات" },
     ],
   },
   about: {
@@ -973,7 +958,7 @@ const ar: typeof en = {
           k: "events",
           cat: "فعاليات",
           t: "ليلة الهاكاثون",
-          d: "48 ساعة، فريق واحد، مشروع واحد مكتمل — تقليد الهاكاثون الفصلي لدينا.",
+          d: "فريق واحد، فكرة واحدة، مشروع واحد مكتمل — نبنيه معًا في جولة عمل واحدة.",
         },
         {
           k: "arduino",
@@ -1435,7 +1420,7 @@ const ar: typeof en = {
         name: "البيت الزراعي الذكي",
         tag: "إنترنت الأشياء · أردوينو",
         meta: "2025 · الأغوار",
-        desc: "حساسات للتربة والمناخ تتولّى الري والتهوية تلقائيًا — ووفّرت 35% من استهلاك المياه.",
+        desc: "حساسات للتربة والمناخ تتولّى ري البيت المحمي وتهويته تلقائيًا.",
       },
       {
         k: "clinic",
@@ -1463,7 +1448,7 @@ const ar: typeof en = {
         name: "روبوتات تتبّع الخط",
         tag: "تعليم",
         meta: "2025 · الزرقاء",
-        desc: "برنامج روبوتات مدرسي — 40 طالبًا بنوا روبوتاتهم وتسابقوا بها.",
+        desc: "برنامج روبوتات مدرسي بنى فيه الطلاب روبوتاتهم وتسابقوا بها.",
       },
     ],
     student: {
@@ -1534,26 +1519,18 @@ const ar: typeof en = {
       {
         t: "مرشدون من الصناعة",
         d: "تعلّم مباشرة من مهندسين وباحثين يعملون فعليًا في الذكاء الاصطناعي والواقع الممتد والروبوتات اليوم.",
-        n: 15,
-        s: "+",
       },
       {
         t: "مختبرات بأجهزة حقيقية",
         d: "اعمل بأجهزة بمستوى إنتاجي، ونظارات، وأجهزة استشعار، ومتحكمات دقيقة — لا محاكاة فقط.",
-        n: 60,
-        s: "+",
       },
       {
         t: "منهج متجدد",
         d: "تتم مراجعة محتوى الدورات كل ربع سنة لمواكبة وتيرة التغير في التقنيات الناشئة.",
-        n: 4,
-        s: "×",
       },
       {
         t: "تسريع المسار الوظيفي",
         d: "مراجعة ملفات الأعمال، ومقابلات تجريبية، وشبكة مباشرة مع شركاء توظيف حول العالم.",
-        n: 95,
-        s: "%",
       },
     ],
   },
@@ -1615,12 +1592,12 @@ const ar: typeof en = {
     },
     numbers: {
       kicker: "بالأرقام",
-      title: "ست سنوات من الإشارة.",
+      title: "Quantum في لمحة.",
       items: [
-        { n: 500, s: "+", l: "طالب تدرّب معنا" },
         { n: 17, s: "", l: "دورة" },
-        { n: 20, s: "+", l: "مشروع" },
-        { n: 95, s: "%", l: "رضا الطلاب" },
+        { n: 7, s: "", l: "مسارات تعليمية" },
+        { n: 13, s: "", l: "أداة صناعية" },
+        { n: 4, s: "", l: "تخصصات تحت سقف واحد" },
       ],
     },
     voices: {
@@ -1696,8 +1673,8 @@ const ar: typeof en = {
       blurb: "قصتنا ورؤيتنا وسبب اختيار الناس للعمل معنا.",
       facts: [
         { n: 4, s: "", l: "تخصصات تحت سقف واحد" },
-        { n: 6, s: "+", l: "سنوات من البناء" },
-        { n: 15, s: "+", l: "مهندسًا ومدرّبًا" },
+        { n: 17, s: "", l: "دورة" },
+        { n: 7, s: "", l: "مسارات تعليمية" },
       ],
     },
     software: {
@@ -1705,9 +1682,8 @@ const ar: typeof en = {
       sub: "مواقع وتطبيقات وأنظمة مخصّصة — مصمّمة للسرعة ومبنية لتدوم.",
       blurb: "مواقع وتطبيقات وأنظمة مخصّصة ولوحات تحكم.",
       facts: [
-        { n: 70, s: "+", l: "موقعًا وتطبيقًا أُطلق" },
-        { n: 99, s: "%", l: "جاهزية المشاريع المستضافة" },
         { n: 4, s: "", l: "خطوط خدمة أساسية" },
+        { n: 5, s: "", l: "خطوات من الفكرة للإطلاق" },
       ],
     },
     ai: {
@@ -1715,9 +1691,8 @@ const ar: typeof en = {
       sub: "روبوتات محادثة ورؤية حاسوبية وتنبؤ — ذكاء عملي لمشكلات حقيقية.",
       blurb: "محادثة ورؤية حاسوبية وتنبؤ وأتمتة وذكاء طرفي.",
       facts: [
-        { n: 25, s: "+", l: "نموذجًا ذكيًا قيد التشغيل" },
         { n: 5, s: "", l: "قدرات ذكاء اصطناعي" },
-        { n: 24, s: "/7", l: "مساعدات لا تنام" },
+        { n: 2, s: "", l: "دورتان في الذكاء الاصطناعي" },
       ],
     },
     arduino: {
@@ -1725,8 +1700,8 @@ const ar: typeof en = {
       sub: "لوحات وحقائب وحساسات ووحدات ذكاء اصطناعي — تعال شاهدها واسأل عنها وابنِ بها.",
       blurb: "لوحات وحقائب وحساسات ووحدات ذكاء متوفرة لدينا.",
       facts: [
-        { n: 60, s: "+", l: "قطعة متوفرة" },
         { n: 24, s: "", l: "نوعًا من القطع" },
+        { n: 4, s: "", l: "فئات للقطع" },
         { n: 4, s: "", l: "حقائب مميّزة" },
       ],
     },
@@ -1736,9 +1711,9 @@ const ar: typeof en = {
       blurb:
         "17 دورة في الذكاء الاصطناعي والواقع الممتد والألعاب والأردوينو والبرمجة والويب والأمن.",
       facts: [
-        { n: 500, s: "+", l: "متدرب" },
         { n: 17, s: "", l: "دورة" },
         { n: 7, s: "", l: "مسارات تعليمية" },
+        { n: 13, s: "", l: "أداة صناعية" },
       ],
     },
     projects: {
@@ -1746,20 +1721,15 @@ const ar: typeof en = {
       sub: "أنظمة حقيقية تعمل في مزارع وعيادات ومحلات ومدارس في أنحاء الأردن.",
       blurb: "مشاريع حقيقية لمزارع وعيادات ومحلات ومدارس.",
       facts: [
-        { n: 20, s: "+", l: "مشروع" },
-        { n: 5, s: "", l: "مدن خدمناها" },
-        { n: 35, s: "%", l: "توفير مياه في مشروع واحد" },
+        { n: 5, s: "", l: "أعمال مختارة" },
+        { n: 7, s: "", l: "مشاريع طلاب" },
       ],
     },
     contact: {
       title: "خلّينا نحكي.",
       sub: "واتساب، اتصال، بريد، أو زرنا في المختبر — نردّ بسرعة.",
       blurb: "واتساب وهاتف وبريد وإنستغرام والموقع.",
-      facts: [
-        { n: 1, s: "س", l: "متوسط وقت الرد" },
-        { n: 7, s: "", l: "أيام في الأسبوع على واتساب" },
-        { n: 95, s: "%", l: "رضا الطلاب" },
-      ],
+      facts: [{ n: 4, s: "", l: "طرق للتواصل معنا" }],
     },
   },
   footer: {

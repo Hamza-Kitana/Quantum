@@ -7,7 +7,7 @@ import pRobot from "@/assets/p-robot.jpg";
 import { useLang } from "@/lib/i18n";
 import { contact } from "@/lib/content";
 import { SectionHead } from "./Chrome";
-import { useCounter, useInView, useScrollLock, useScrollProgress } from "./hooks";
+import { useScrollLock, useScrollProgress } from "./hooks";
 import { PageLink } from "./PageTransition";
 
 const imgs: Record<string, string> = { board: pBoard, kit: pKit, cam: pCam, robot: pRobot };
@@ -555,26 +555,22 @@ export function Projects() {
   );
 }
 
-function WhyItem({
-  i,
-  t: title,
-  d,
-  n,
-  s: unit,
-}: {
-  i: number;
-  t: string;
-  d: string;
-  n: number;
-  s: string;
-}) {
-  const [ref, inView] = useInView<HTMLDivElement>(0.4);
-  const pct = useCounter(n, inView);
+const whyIcons = [
+  <>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21a8 8 0 0 1 16 0" />
+  </>,
+  <>
+    <rect x="6" y="6" width="12" height="12" rx="2" />
+    <path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4" />
+  </>,
+  <path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5" />,
+  <path d="M3 17l6-6 4 4 8-8M15 7h6v6" />,
+];
+
+function WhyItem({ i, t: title, d }: { i: number; t: string; d: string }) {
   return (
-    <div
-      ref={ref}
-      className="reveal group grid items-baseline gap-4 border-b py-8 transition-colors hover:bg-surface/50 md:grid-cols-[120px_1fr_200px] md:px-4"
-    >
+    <div className="reveal group grid items-center gap-4 border-b py-8 transition-colors hover:bg-surface/50 md:grid-cols-[120px_1fr_120px] md:px-4">
       <span className="font-mono text-sm text-cyan" dir="ltr">
         0{i + 1}
       </span>
@@ -584,9 +580,18 @@ function WhyItem({
         </h3>
         <p className="mt-2 max-w-xl text-muted-foreground">{d}</p>
       </div>
-      <span className="font-display text-4xl text-signal md:text-end" dir="ltr">
-        {pct}
-        {unit}
+      <span className="hidden h-16 w-16 place-items-center justify-self-end rounded-2xl border border-cyan/30 bg-cyan/5 transition-all duration-500 group-hover:-rotate-6 group-hover:border-cyan/60 group-hover:glow-cyan md:grid">
+        <svg
+          viewBox="0 0 24 24"
+          className="h-7 w-7 text-cyan"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {whyIcons[i]}
+        </svg>
       </span>
     </div>
   );
