@@ -514,7 +514,10 @@ export function Footer() {
             </span>
           </PageLink>
           <p className="mt-4 max-w-sm text-sm text-muted-foreground">{t.footer.tagline}</p>
-          <p className="mt-4 font-mono text-xs tracking-[0.3em] text-cyan text-start" dir="ltr">
+          <p
+            className="mt-4 font-mono text-xs tracking-[0.3em] text-cyan text-start rtl:text-right"
+            dir="ltr"
+          >
             SOFTWARE + AI + ARDUINO + EDUCATION
           </p>
         </div>

@@ -230,7 +230,7 @@ export function Faq() {
             "radial-gradient(50% 50% at 20% 40%, color-mix(in oklab, var(--blue) 12%, transparent), transparent 70%)",
         }}
       />
-      <div className="relative mx-auto grid max-w-[96rem] gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+      <div className="relative mx-auto grid max-w-[96rem] grid-cols-1 gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHead kicker={f.kicker} title={f.title} sub={f.sub} />
           <div

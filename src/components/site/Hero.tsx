@@ -98,7 +98,7 @@ function Stat({ n, s, l, run }: { n: number; s: string; l: string; run: boolean 
   const v = useCounter(n, run);
   return (
     <div>
-      <div className="font-display text-2xl text-signal md:text-3xl" dir="ltr">
+      <div className="font-display text-2xl text-signal rtl:text-right md:text-3xl" dir="ltr">
         {v}
         {s}
       </div>

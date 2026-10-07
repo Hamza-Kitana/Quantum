@@ -432,7 +432,6 @@ export function Courses() {
               >
                 <span
                   className={`absolute top-6 grid h-12 w-12 place-items-center rounded-full border-2 bg-background font-mono text-sm transition-all duration-500 start-0 ${i % 2 ? "md:-start-6" : "md:start-auto md:-end-6"} ${on ? "scale-110 border-cyan text-cyan glow-cyan" : "border-border text-muted-foreground"}`}
-                  dir="ltr"
                 >
                   0{i + 1}
                 </span>
@@ -527,10 +526,7 @@ export function Projects() {
                   className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-700 group-hover:scale-105 group-hover:opacity-80"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                <span
-                  className="absolute end-5 top-4 font-display text-5xl text-foreground/15 transition-colors group-hover:text-cyan/40"
-                  dir="ltr"
-                >
+                <span className="absolute end-5 top-4 font-display text-5xl text-foreground/15 transition-colors group-hover:text-cyan/40">
                   0{i + 1}
                 </span>
                 <div
@@ -694,7 +690,10 @@ export function Contact() {
                 </span>
                 <span className="flex-1">
                   <span className="block text-sm text-muted-foreground">{c.follow}</span>
-                  <span className="block font-display text-xl text-signal" dir="ltr">
+                  <span
+                    className="mt-1 block font-display text-xl leading-snug text-signal rtl:text-right"
+                    dir="ltr"
+                  >
                     {contact.instagramHandle}
                   </span>
                   <span className="mt-1 block text-xs text-muted-foreground">{c.followSub}</span>
@@ -715,7 +714,7 @@ export function Contact() {
                 >
                   <span className="font-mono text-xs tracking-widest text-cyan">{it.l}</span>
                   <span
-                    className="mt-2 block break-all"
+                    className="mt-2 block break-all rtl:text-right"
                     dir={it.l === c.labels.location ? undefined : "ltr"}
                   >
                     {it.v}

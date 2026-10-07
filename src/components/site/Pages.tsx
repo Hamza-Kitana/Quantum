@@ -34,7 +34,10 @@ function Fact({
       className={`border-s ps-3 sm:ps-5 transition-all duration-700 ${run ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="font-display text-2xl text-signal sm:text-3xl md:text-4xl" dir="ltr">
+      <div
+        className="font-display text-2xl text-signal rtl:text-right sm:text-3xl md:text-4xl"
+        dir="ltr"
+      >
         {v}
         {s}
       </div>
@@ -203,8 +206,7 @@ export function NextPage({ id }: { id: SubPage }) {
       />
       <span
         aria-hidden
-        className="outline-num pointer-events-none absolute end-6 top-1/2 -translate-y-1/2 select-none font-display text-[9rem] leading-none transition-transform duration-700 group-hover:scale-110 md:text-[14rem]"
-        dir="ltr"
+        className="outline-num pointer-events-none absolute end-6 top-1/2 hidden sm:block -translate-y-1/2 select-none font-display text-[9rem] leading-none transition-transform duration-700 group-hover:scale-110 md:text-[14rem]"
       >
         0{pages.indexOf(next)}
       </span>

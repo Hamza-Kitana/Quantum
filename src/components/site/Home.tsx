@@ -199,10 +199,7 @@ export function Process() {
                             : "none",
                         }}
                       >
-                        <span
-                          className="outline-num pointer-events-none absolute -top-2 end-4 font-display text-8xl leading-none md:text-9xl"
-                          dir="ltr"
-                        >
+                        <span className="outline-num pointer-events-none absolute -top-2 end-4 font-display text-8xl leading-none md:text-9xl">
                           0{i + 1}
                         </span>
                         <span
@@ -221,7 +218,7 @@ export function Process() {
                           </svg>
                         </span>
                         <span className="mt-6 font-mono text-[11px] tracking-[0.3em] text-cyan">
-                          STEP 0{i + 1}
+                          {s.step} 0{i + 1}
                         </span>
                         <h3 className="mt-auto pt-6 font-display text-3xl md:text-4xl">{st.t}</h3>
                         <p className="mt-3 text-muted-foreground">{st.d}</p>
@@ -293,10 +290,7 @@ export function Showcase() {
                     {p.meta}
                   </span>
                 </div>
-                <span
-                  className="absolute end-5 top-4 font-display text-6xl text-foreground/15 md:end-10 md:top-8 md:text-8xl"
-                  dir="ltr"
-                >
+                <span className="absolute end-5 top-4 font-display text-6xl text-foreground/15 md:end-10 md:top-8 md:text-8xl">
                   0{i + 1}
                 </span>
                 <div className="absolute inset-x-0 bottom-0 p-5 md:p-10">
@@ -348,7 +342,7 @@ function Stat({ n, s, l, i, run }: { n: number; s: string; l: string; i: number;
         0{i + 1}
       </span>
       <div
-        className="mt-6 whitespace-nowrap font-display text-4xl leading-none text-signal sm:text-5xl md:mt-10 md:text-6xl 2xl:text-7xl"
+        className="mt-6 whitespace-nowrap font-display text-4xl leading-none text-signal rtl:text-right sm:text-5xl md:mt-10 md:text-6xl 2xl:text-7xl"
         dir="ltr"
       >
         {v}
@@ -395,11 +389,23 @@ export function Numbers() {
   );
 }
 
-function Quote({ q, n, r, dir }: { q: string; n: string; r: string; dir: "rtl" | "ltr" }) {
+function Quote({
+  q,
+  n,
+  r,
+  dir,
+  className = "w-[300px] md:w-[420px]",
+}: {
+  q: string;
+  n: string;
+  r: string;
+  dir: "rtl" | "ltr";
+  className?: string;
+}) {
   return (
     <figure
       dir={dir}
-      className="flex w-[300px] shrink-0 flex-col rounded-2xl border bg-card/70 p-6 transition-colors hover:border-cyan/40 md:w-[420px] md:p-8"
+      className={`flex shrink-0 flex-col rounded-2xl border bg-card/70 p-6 transition-colors hover:border-cyan/40 md:p-8 ${className}`}
     >
       <div className="flex items-center justify-between">
         <svg viewBox="0 0 24 24" className="h-8 w-8 text-cyan/60" fill="currentColor" aria-hidden>
@@ -437,8 +443,13 @@ export function Voices() {
       <div className="mx-auto max-w-[96rem] px-5 sm:px-6 md:px-16">
         <SectionHead kicker={s.kicker} title={s.title} />
       </div>
+      <div className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-5 px-5 pb-2 sm:scroll-px-6 sm:px-6 md:hidden">
+        {s.items.map((v) => (
+          <Quote key={v.n} {...v} dir={dir} className="w-[82vw] max-w-sm snap-start" />
+        ))}
+      </div>
       <div
-        className="space-y-4 md:space-y-6"
+        className="hidden space-y-6 md:block"
         dir="ltr"
         style={{
           maskImage: "linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)",

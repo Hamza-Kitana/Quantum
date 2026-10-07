@@ -115,7 +115,7 @@ export function StudentProjects() {
                   <p className="relative mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
                     {it.desc}
                   </p>
-                  <div className="relative mt-6 flex flex-wrap gap-2" dir="ltr">
+                  <div className="relative mt-6 flex flex-wrap gap-2 rtl:justify-end" dir="ltr">
                     {it.tags.map((tg) => (
                       <span
                         key={tg}
@@ -283,7 +283,7 @@ export function Tools() {
             return (
               <div
                 key={name}
-                className="reveal group relative flex w-[calc(50%-0.375rem)] items-center gap-4 overflow-hidden rounded-2xl border bg-card/70 p-4 backdrop-blur-sm transition-transform duration-500 hover:-translate-y-1 sm:w-60 md:p-5"
+                className="reveal group relative flex w-[calc(50%-0.375rem)] items-center gap-3 overflow-hidden rounded-2xl border bg-card/70 p-3 backdrop-blur-sm sm:gap-4 sm:p-4 transition-transform duration-500 hover:-translate-y-1 sm:w-60 md:p-5"
                 style={{ transitionDelay: `${(i % 5) * 70}ms` }}
               >
                 <span
@@ -295,22 +295,25 @@ export function Tools() {
                   }}
                 />
                 <span
-                  className="relative grid h-12 w-12 shrink-0 place-items-center rounded-xl transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110"
+                  className="relative grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-transform sm:h-12 sm:w-12 duration-500 group-hover:-rotate-6 group-hover:scale-110"
                   style={{
                     border: `1px solid color-mix(in oklab, ${m.color} 45%, transparent)`,
                     background: `linear-gradient(145deg, color-mix(in oklab, ${m.color} 24%, transparent), transparent)`,
                   }}
                 >
-                  <Icon color={m.color} className="h-6 w-6">
+                  <Icon color={m.color} className="h-5 w-5 sm:h-6 sm:w-6">
                     {m.icon}
                   </Icon>
                 </span>
                 <span className="relative min-w-0">
-                  <span className="block truncate font-semibold md:text-lg" dir="ltr">
+                  <span
+                    className="block font-semibold leading-snug rtl:text-right sm:truncate md:text-lg"
+                    dir="ltr"
+                  >
                     {name}
                   </span>
                   <span
-                    className="block truncate font-mono text-[11px] tracking-wide"
+                    className="mt-0.5 block font-mono text-[11px] leading-snug tracking-wide sm:truncate"
                     style={{ color: m.color }}
                   >
                     {s.kinds[kind]}
@@ -378,7 +381,7 @@ export function Gallery() {
                 <svg
                   aria-hidden
                   viewBox="0 0 24 24"
-                  className={`absolute -end-6 -top-6 opacity-20 transition-all duration-700 group-hover:rotate-6 group-hover:opacity-40 ${i === 0 ? "h-72 w-72" : "h-44 w-44"}`}
+                  className={`absolute -end-6 -top-6 opacity-10 transition-all duration-700 group-hover:rotate-6 group-hover:opacity-40 md:opacity-20 ${i === 0 ? "h-40 w-40 md:h-72 md:w-72" : "h-36 w-36 md:h-44 md:w-44"}`}
                   fill="none"
                   stroke={m.color}
                   strokeWidth="0.8"

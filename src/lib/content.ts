@@ -720,6 +720,7 @@ const en = {
       "Future Technologies",
     ],
     process: {
+      step: "STEP",
       kicker: "HOW WE BUILD",
       title: "From a spark to a running system.",
       sub: "Every Quantum project travels the same five-stage circuit — so you always know what comes next.",
@@ -1573,6 +1574,7 @@ const ar: typeof en = {
       "تقنيات المستقبل",
     ],
     process: {
+      step: "الخطوة",
       kicker: "كيف نبني",
       title: "من فكرة صغيرة إلى نظام شغّال.",
       sub: "كل مشروع في كوانتم يمرّ بنفس الدائرة من خمس مراحل — فتعرف دائمًا ما الخطوة التالية.",
