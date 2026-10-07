@@ -9,7 +9,12 @@ export function About() {
       <div className="mx-auto max-w-[96rem]">
         <SectionHead kicker={t.about.kicker} title={t.about.title} />
         <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr]">
-          <p className="reveal text-2xl leading-relaxed md:text-3xl">{t.about.body}</p>
+          <div>
+            <p className="reveal text-2xl leading-relaxed md:text-3xl">{t.about.body}</p>
+            <p className="reveal mt-6 max-w-2xl leading-relaxed text-muted-foreground md:text-lg">
+              {t.about.body2}
+            </p>
+          </div>
           <div className="space-y-6">
             {[
               [t.about.vision, t.about.visionText],
@@ -26,6 +31,30 @@ export function About() {
             ))}
           </div>
         </div>
+        <ul className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {t.about.points.map((p, i) => (
+            <li
+              key={p}
+              className="reveal glass flex items-start gap-3 rounded-2xl p-5"
+              style={{ transitionDelay: `${i * 100}ms` }}
+            >
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-signal text-primary-foreground">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-3.5 w-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12l5 5 9-10" />
+                </svg>
+              </span>
+              <span className="text-sm leading-relaxed">{p}</span>
+            </li>
+          ))}
+        </ul>
         <div className="mt-20 overflow-hidden border-y py-6" dir="ltr">
           <div className="flex w-max animate-marquee gap-12 font-display text-4xl leading-[1.4] md:text-6xl md:leading-[1.4]">
             {[...t.about.pillars, ...t.about.pillars, ...t.about.pillars, ...t.about.pillars].map(

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { About } from "@/components/site/Sections";
 import { Why } from "@/components/site/Sections2";
+import { Gallery } from "@/components/site/LabSections";
 import { NextPage, Page, PageHero } from "@/components/site/Pages";
 import { Divider, Reveal } from "@/components/site/Transitions";
 
@@ -32,6 +33,10 @@ function AboutPage() {
       <Divider to="why" n={2} />
       <Reveal n={2} label={t.why.title}>
         <Why />
+      </Reveal>
+      <Divider to="projects" n={3} label={t.about.gallery.kicker} />
+      <Reveal n={3} label={t.about.gallery.kicker}>
+        <Gallery />
       </Reveal>
       <NextPage id="about" />
     </Page>

@@ -555,10 +555,21 @@ export function Projects() {
   );
 }
 
-function WhyItem({ i, t: title, d }: { i: number; t: string; d: string }) {
+function WhyItem({
+  i,
+  t: title,
+  d,
+  n,
+  s: unit,
+}: {
+  i: number;
+  t: string;
+  d: string;
+  n: number;
+  s: string;
+}) {
   const [ref, inView] = useInView<HTMLDivElement>(0.4);
-  const pct = useCounter([100, 95, 24, 87][i] ?? 0, inView);
-  const unit = ["%", "%", "/7", "%"][i];
+  const pct = useCounter(n, inView);
   return (
     <div
       ref={ref}
@@ -586,7 +597,7 @@ export function Why() {
   return (
     <section id="why" className="px-5 py-20 sm:px-6 sm:py-28 md:px-16 md:py-36">
       <div className="mx-auto max-w-[96rem]">
-        <SectionHead kicker={t.why.kicker} title={t.why.title} />
+        <SectionHead kicker={t.why.kicker} title={t.why.title} sub={t.why.sub} />
         <div className="border-t">
           {t.why.items.map((w, i) => (
             <WhyItem key={w.t} i={i} {...w} />

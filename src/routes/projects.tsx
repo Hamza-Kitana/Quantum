@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { Projects, Why } from "@/components/site/Sections2";
+import { StudentProjects } from "@/components/site/LabSections";
 import { NextPage, Page, PageHero } from "@/components/site/Pages";
 import { Divider, Reveal } from "@/components/site/Transitions";
 
@@ -28,8 +29,12 @@ function ProjectsPage() {
       <Reveal n={1} label={t.nav.projects}>
         <Projects />
       </Reveal>
-      <Divider to="why" n={2} />
-      <Reveal n={2} label={t.why.title}>
+      <Divider to="courses" n={2} label={t.projects.student.kicker} />
+      <Reveal n={2} label={t.projects.student.kicker}>
+        <StudentProjects />
+      </Reveal>
+      <Divider to="why" n={3} />
+      <Reveal n={3} label={t.why.title}>
         <Why />
       </Reveal>
       <NextPage id="projects" />
