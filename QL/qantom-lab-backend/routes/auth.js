@@ -21,8 +21,8 @@ router.post('/login', loginLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Username and password are required.' });
     }
 
-    const envUser = process.env.ADMIN_USERNAME;
-    const envPass = process.env.ADMIN_PASSWORD;
+    const envUser = (process.env.ADMIN_USERNAME || '').trim();
+    const envPass = (process.env.ADMIN_PASSWORD || '').trim();
     if (!envUser || !envPass || username.trim() !== envUser || password !== envPass) {
       return res.status(401).json({ error: 'Invalid username or password.' });
     }

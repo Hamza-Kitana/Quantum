@@ -111,7 +111,13 @@ app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/faq', faqRoutes);
 app.use('/api/settings', settingsRoutes);
 
-app.get('/api/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
+app.get('/api/health', (req, res) =>
+  res.json({
+    ok: true,
+    time: new Date().toISOString(),
+    adminLoginConfigured: Boolean(process.env.ADMIN_USERNAME && process.env.ADMIN_PASSWORD),
+  })
+);
 
 // ---- Static frontend (public site) + admin panel ----
 app.use(express.static(path.join(__dirname, 'public')));
