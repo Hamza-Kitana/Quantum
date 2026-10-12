@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 const session = require('express-session');
+const cookieSession = require('cookie-session');
 const MongoStore = require('connect-mongo');
 
 const connectDB = require('./config/db');
@@ -62,28 +63,43 @@ app.use(
 
 app.set('trust proxy', 1);
 
-app.use(
-  session({
-    name: 'qlab.sid',
-    secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
-    resave: false,
-    saveUninitialized: false,
-    // Falls back to the in-memory store (sessions reset on restart) when there's no database.
-    store: isDbConfigured()
-      ? MongoStore.create({
-          mongoUrl: process.env.MONGO_URI,
-          collectionName: 'sessions',
-          ttl: 60 * 60 * 24 * 7, // 7 days
-        })
-      : undefined,
-    cookie: {
+const sessionSecret = process.env.SESSION_SECRET || 'dev-secret-change-me';
+const sessionMaxAge = 1000 * 60 * 60 * 24 * 7; // 7 days
+
+if (isDbConfigured()) {
+  app.use(
+    session({
+      name: 'qlab.sid',
+      secret: sessionSecret,
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+        collectionName: 'sessions',
+        ttl: sessionMaxAge / 1000,
+      }),
+      cookie: {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: 'lax',
+        maxAge: sessionMaxAge,
+      },
+    })
+  );
+} else {
+  // Serverless hosts (e.g. Vercel) don't keep memory between requests,
+  // so without a database the session lives in a signed cookie instead.
+  app.use(
+    cookieSession({
+      name: 'qlab.sid',
+      keys: [sessionSecret],
       httpOnly: true,
       secure: isProd,
       sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    },
-  })
-);
+      maxAge: sessionMaxAge,
+    })
+  );
+}
 
 // ---- API routes ----
 app.use('/api/auth', authRoutes);

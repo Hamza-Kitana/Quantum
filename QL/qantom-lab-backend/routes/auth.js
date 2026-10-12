@@ -27,11 +27,18 @@ router.post('/login', loginLimiter, async (req, res) => {
       return res.status(401).json({ error: 'Invalid username or password.' });
     }
 
-    req.session.regenerate((err) => {
-      if (err) return res.status(500).json({ error: 'Login failed. Try again.' });
+    const signIn = () => {
       req.session.adminId = envUser;
       req.session.username = envUser;
       res.json({ ok: true, username: envUser });
+    };
+
+    // Cookie sessions (no database) have no server-side session to regenerate.
+    if (typeof req.session.regenerate !== 'function') return signIn();
+
+    req.session.regenerate((err) => {
+      if (err) return res.status(500).json({ error: 'Login failed. Try again.' });
+      signIn();
     });
   } catch (err) {
     console.error('[auth/login]', err);
@@ -41,6 +48,10 @@ router.post('/login', loginLimiter, async (req, res) => {
 
 // POST /api/auth/logout
 router.post('/logout', (req, res) => {
+  if (typeof req.session.destroy !== 'function') {
+    req.session = null;
+    return res.json({ ok: true });
+  }
   req.session.destroy(() => {
     res.clearCookie('qlab.sid');
     res.json({ ok: true });

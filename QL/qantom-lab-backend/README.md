@@ -45,7 +45,7 @@ cp .env.example .env
 ```
 
 Edit `.env` and fill in:
-- `MONGO_URI` — your Atlas connection string from step 2. If left unset, the server still runs: the public site shows its built-in static content and admin login works, but nothing can be saved and sessions reset on restart.
+- `MONGO_URI` — your Atlas connection string from step 2. If left unset, the server still runs: the public site shows its built-in static content and admin login works, but nothing can be saved. The admin session is then kept in a signed cookie, so login also works on serverless hosts like Vercel.
 - `SESSION_SECRET` — any long random string (the .env.example file shows a command to generate one).
 - `ADMIN_USERNAME` / `ADMIN_PASSWORD` — the login for `/admin`. Change them and restart the server to update the login.
 
