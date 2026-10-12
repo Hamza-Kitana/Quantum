@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qantom Lab — Admin Panel</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500..700&family=Inter:wght@400..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cyan:#00D9FF; --blue:#5B5BFF; --purple:#A855F7;
+  --navy:#050816; --black:#030303;
+  --glass:rgba(255,255,255,0.04); --glass-border:rgba(255,255,255,0.09);
+  --text:#eef1f8; --muted:#9aa3b8;
+  --grad:linear-gradient(120deg, var(--cyan), var(--blue) 55%, var(--purple));
+  --ease:cubic-bezier(.16,.84,.44,1);
+  --danger:#ff6b6b; --ok:#3ddc97;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background:radial-gradient(ellipse 90% 60% at 50% -10%, #0d1230 0%, var(--navy) 45%, var(--black) 100%);
+  color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.brand{font-family:'Space Grotesk',sans-serif;}
+a{color:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;color:inherit;background:none;}
+input,select,textarea{font-family:inherit;color:var(--text);}
+
+/* ---------- Login screen ---------- */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-card{width:100%;max-width:380px;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(18px);border-radius:22px;padding:38px 32px;}
+.login-card .brand{font-size:22px;font-weight:700;margin-bottom:4px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.login-card p.sub{color:var(--muted);font-size:13.5px;margin-bottom:26px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px;}
+.field input{width:100%;padding:12px 14px;border-radius:11px;border:1px solid var(--glass-border);background:rgba(255,255,255,.03);font-size:14px;}
+.field input:focus{outline:none;border-color:rgba(0,217,255,.5);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:100px;font-weight:600;font-size:14px;transition:transform .25s var(--ease), box-shadow .25s var(--ease);}
+.btn-primary{background:var(--grad);color:#04040a;width:100%;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 26px rgba(0,217,255,.35);}
+.btn-ghost{background:var(--glass);border:1px solid var(--glass-border);}
+.btn-ghost:hover{border-color:rgba(0,217,255,.4);}
+.btn-danger{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ffb3b3;padding:8px 14px;font-size:12.5px;border-radius:9px;}
+.btn-small{padding:8px 14px;font-size:12.5px;border-radius:9px;}
+.error-msg{color:var(--danger);font-size:13px;margin-top:14px;min-height:16px;}
+
+/* ---------- App shell ---------- */
+#app{display:none;min-height:100vh;}
+.app-shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh;}
+.sidebar{border-right:1px solid var(--glass-border);background:rgba(255,255,255,.02);padding:26px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.sidebar .brand{font-size:18px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:2px;}
+.sidebar .brand-sub{color:var(--muted);font-size:11.5px;margin-bottom:28px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:11px;font-size:13.5px;color:var(--muted);margin-bottom:4px;text-align:left;width:100%;transition:all .2s;}
+.nav-item .count{margin-left:auto;background:rgba(255,255,255,.06);border-radius:20px;padding:1px 8px;font-size:11px;}
+.nav-item:hover{background:rgba(255,255,255,.04);color:var(--text);}
+.nav-item.active{background:linear-gradient(120deg, rgba(0,217,255,.14), rgba(168,85,247,.1));color:var(--text);border:1px solid rgba(0,217,255,.25);}
+.sidebar-foot{margin-top:auto;padding-top:16px;border-top:1px solid var(--glass-border);}
+.sidebar-foot .who{font-size:12.5px;color:var(--muted);margin-bottom:10px;}
+
+.main{padding:34px 40px;overflow-x:hidden;}
+.main-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap;}
+.main-head h2{font-size:24px;font-weight:600;}
+.main-head p{color:var(--muted);font-size:13.5px;margin-top:4px;}
+
+.panel{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(14px);border-radius:18px;padding:22px;margin-bottom:24px;}
+.panel h3{font-size:15px;font-weight:600;margin-bottom:16px;}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.03em;padding:0 10px 10px;border-bottom:1px solid var(--glass-border);}
+td{padding:13px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+.muted{color:var(--muted);}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;}
+.pill-beginner{background:rgba(61,220,151,.12);color:var(--ok);}
+.pill-intermediate{background:rgba(0,217,255,.12);color:var(--cyan);}
+.pill-advanced{background:rgba(168,85,247,.15);color:#c99bff;}
+.pill-unread{background:rgba(0,217,255,.14);color:var(--cyan);}
+.pill-read{background:rgba(255,255,255,.06);color:var(--muted);}
+.row-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.icon-btn{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);display:inline-flex;align-items:center;justify-content:center;}
+.icon-btn:hover{border-color:rgba(0,217,255,.4);}
+.icon-btn svg{width:14px;height:14px;stroke:var(--text);fill:none;stroke-width:2;}
+.icon-btn.danger:hover{border-color:rgba(255,107,107,.5);}
+.icon-btn.danger svg{stroke:#ffb3b3;}
+.empty-row td{text-align:center;color:var(--muted);padding:34px 10px;}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-grid .full{grid-column:1/-1;}
+.form-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.form-field input,.form-field select,.form-field textarea{width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--glass-border);background:rgba(255,255,255,.03);font-size:13.5px;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:none;border-color:rgba(0,217,255,.5);}
+.form-field textarea{resize:vertical;min-height:70px;}
+.form-actions{display:flex;gap:10px;margin-top:18px;}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(10,14,32,.95);border:1px solid var(--glass-border);backdrop-filter:blur(14px);padding:13px 18px;border-radius:12px;font-size:13.5px;z-index:500;opacity:0;transform:translateY(10px);transition:all .3s var(--ease);pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.err{border-color:rgba(255,107,107,.4);color:#ffb3b3;}
+.toast.ok{border-color:rgba(61,220,151,.4);color:var(--ok);}
+
+.msg-preview{max-width:280px;color:var(--muted);}
+.msg-full{white-space:pre-wrap;font-size:13px;color:var(--text);margin-top:6px;max-width:420px;}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:26px;}
+.stat-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:18px 20px;}
+.stat-card .num{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.stat-card .label{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.hidden{display:none !important;}
+@media (max-width:820px){
+  .app-shell{grid-template-columns:1fr;}
+  .sidebar{position:relative;height:auto;flex-direction:row;flex-wrap:wrap;gap:6px;}
+  .sidebar .brand,.sidebar .brand-sub{width:100%;}
+  .main{padding:22px 18px;}
+  .form-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="brand">Qantom Lab</div>
+    <p class="sub">Admin panel — sign in to continue.</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginUser">Username</label>
+        <input type="text" id="loginUser" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary" id="loginBtn">Sign In</button>
+      <p class="error-msg" id="loginError"></p>
+    </form>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Qantom Lab</div>
+      <div class="brand-sub">Admin Panel</div>
+      <button class="nav-item active" data-tab="dashboard">Dashboard</button>
+      <button class="nav-item" data-tab="courses">Courses <span class="count" id="countCourses">0</span></button>
+      <button class="nav-item" data-tab="testimonials">Testimonials <span class="count" id="countTestimonials">0</span></button>
+      <button class="nav-item" data-tab="gallery">Gallery <span class="count" id="countGallery">0</span></button>
+      <button class="nav-item" data-tab="faq">FAQ <span class="count" id="countFaq">0</span></button>
+      <button class="nav-item" data-tab="contact">Contact Messages <span class="count" id="countContact">0</span></button>
+      <button class="nav-item" data-tab="newsletter">Newsletter <span class="count" id="countNewsletter">0</span></button>
+      <button class="nav-item" data-tab="settings">Site Settings</button>
+      <div class="sidebar-foot">
+        <div class="who">Signed in as <strong id="whoUser"></strong></div>
+        <button class="btn btn-ghost btn-small" id="logoutBtn" style="width:100%;">Log Out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- DASHBOARD -->
+      <section class="tab-panel" id="tab-dashboard">
+        <div class="main-head"><div><h2>Dashboard</h2><p>Overview of your site content.</p></div></div>
+        <div class="stat-row">
+          <div class="stat-card"><div class="num" id="statCourses">0</div><div class="label">Courses</div></div>
+          <div class="stat-card"><div class="num" id="statTestimonials">0</div><div class="label">Testimonials</div></div>
+          <div class="stat-card"><div class="num" id="statGallery">0</div><div class="label">Gallery Items</div></div>
+          <div class="stat-card"><div class="num" id="statUnread">0</div><div class="label">Unread Messages</div></div>
+          <div class="stat-card"><div class="num" id="statSubs">0</div><div class="label">Newsletter Subscribers</div></div>
+        </div>
+        <div class="panel">
+          <h3>Recent Contact Messages</h3>
+          <table><thead><tr><th>Name</th><th>Course</th><th>Message</th><th>Date</th></tr></thead>
+          <tbody id="dashRecentMsgs"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <!-- COURSES -->
+      <section class="tab-panel hidden" id="tab-courses">
+        <div class="main-head">
+          <div><h2>Courses</h2><p>Add, edit or remove the courses shown on the public site.</p></div>
+          <button class="btn btn-primary btn-small" id="addCourseBtn">+ Add Course</button>
+        </div>
+        <div class="panel hidden" id="courseFormPanel">
+          <h3 id="courseFormTitle">Add Course</h3>
+          <form id="courseForm">
+            <input type="hidden" id="courseId">
+            <div class="form-grid">
+              <div class="form-field"><label>Title *</label><input id="courseTitle" required maxlength="120"></div>
+              <div class="form-field"><label>Icon (emoji)</label><input id="courseIcon" maxlength="8" placeholder="🤖"></div>
+              <div class="form-field full"><label>Description *</label><textarea id="courseDescription" required maxlength="600"></textarea></div>
+              <div class="form-field"><label>Title (Arabic)</label><input id="courseTitleAr" dir="rtl" maxlength="120"></div>
+              <div class="form-field full"><label>Description (Arabic)</label><textarea id="courseDescriptionAr" dir="rtl" maxlength="600"></textarea></div>
+              <div class="form-field"><label>Duration *</label><input id="courseDuration" required placeholder="e.g. 12 Weeks"></div>
+              <div class="form-field"><label>Duration (Arabic)</label><input id="courseDurationAr" dir="rtl" placeholder="e.g. 12 أسبوع"></div>
+              <div class="form-field"><label>Difficulty</label>
+                <select id="courseDifficulty"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
+              </div>
+              <div class="form-field"><label>Category (site filter)</label>
+                <select id="courseCategory">
+                  <option value="ai">AI &amp; ML</option>
+                  <option value="xr">XR / VR / AR</option>
+                  <option value="engines">Engines &amp; Games</option>
+                  <option value="hardware">Arduino &amp; Robotics</option>
+                  <option value="programming">Programming</option>
+                  <option value="webdesign">Web &amp; Design</option>
+                  <option value="secdata">Security &amp; Data</option>
+                </select>
+              </div>
+              <div class="form-field"><label>Order</label><input id="courseOrder" type="number" value="0"></div>
+              <div class="form-field"><label><input type="checkbox" id="coursePublished" checked style="width:auto;display:inline-block;margin-right:6px;">Published</label></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-small">Save Course</button>
+              <button type="button" class="btn btn-ghost btn-small" id="cancelCourseForm">Cancel</button>
+            </div>
+          </form>
+        </div>
+        <div class="panel">
+          <table><thead><tr><th>Title</th><th>Duration</th><th>Difficulty</th><th>Status</th><th></th></tr></thead>
+          <tbody id="coursesTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS -->
+      <section class="tab-panel hidden" id="tab-testimonials">
+        <div class="main-head">
+          <div><h2>Testimonials</h2><p>Student quotes shown in the Testimonials carousel.</p></div>
+          <button class="btn btn-primary btn-small" id="addTestimonialBtn">+ Add Testimonial</button>
+        </div>
+        <div class="panel hidden" id="testimonialFormPanel">
+          <h3 id="testimonialFormTitle">Add Testimonial</h3>
+          <form id="testimonialForm">
+            <input type="hidden" id="testimonialId">
+            <div class="form-grid">
+              <div class="form-field"><label>Name *</label><input id="testimonialName" required maxlength="80"></div>
+              <div class="form-field"><label>Role / Track *</label><input id="testimonialRole" required maxlength="100"></div>
+              <div class="form-field full"><label>Quote *</label><textarea id="testimonialQuote" required maxlength="500"></textarea></div>
+              <div class="form-field"><label>Role / Track (Arabic)</label><input id="testimonialRoleAr" dir="rtl" maxlength="100"></div>
+              <div class="form-field full"><label>Quote (Arabic)</label><textarea id="testimonialQuoteAr" dir="rtl" maxlength="500"></textarea></div>
+              <div class="form-field"><label>Rating (1-5)</label><input id="testimonialRating" type="number" min="1" max="5" value="5"></div>
+              <div class="form-field"><label>Avatar Initials</label><input id="testimonialInitials" maxlength="4" placeholder="auto if blank"></div>
+              <div class="form-field"><label>Order</label><input id="testimonialOrder" type="number" value="0"></div>
+              <div class="form-field"><label><input type="checkbox" id="testimonialPublished" checked style="width:auto;display:inline-block;margin-right:6px;">Published</label></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-small">Save Testimonial</button>
+              <button type="button" class="btn btn-ghost btn-small" id="cancelTestimonialForm">Cancel</button>
+            </div>
+          </form>
+        </div>
+        <div class="panel">
+          <table><thead><tr><th>Name</th><th>Role</th><th>Quote</th><th>Status</th><th></th></tr></thead>
+          <tbody id="testimonialsTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <!-- GALLERY -->
+      <section class="tab-panel hidden" id="tab-gallery">
+        <div class="main-head">
+          <div><h2>Gallery</h2><p>Photos/moments shown in the "Life at the Lab" masonry gallery.</p></div>
+          <button class="btn btn-primary btn-small" id="addGalleryBtn">+ Add Item</button>
+        </div>
+        <div class="panel hidden" id="galleryFormPanel">
+          <h3 id="galleryFormTitle">Add Gallery Item</h3>
+          <form id="galleryForm">
+            <input type="hidden" id="galleryId">
+            <div class="form-grid">
+              <div class="form-field"><label>Title *</label><input id="galleryTitle" required maxlength="100"></div>
+              <div class="form-field"><label>Category</label><input id="galleryCategory" placeholder="General"></div>
+              <div class="form-field full"><label>Description *</label><textarea id="galleryDescription" required maxlength="400"></textarea></div>
+              <div class="form-field"><label>Title (Arabic)</label><input id="galleryTitleAr" dir="rtl" maxlength="100"></div>
+              <div class="form-field full"><label>Description (Arabic)</label><textarea id="galleryDescriptionAr" dir="rtl" maxlength="400"></textarea></div>
+              <div class="form-field full"><label>Image URL (optional)</label><input id="galleryImageUrl" placeholder="https://…"></div>
+              <div class="form-field"><label>Order</label><input id="galleryOrder" type="number" value="0"></div>
+              <div class="form-field"><label><input type="checkbox" id="galleryPublished" checked style="width:auto;display:inline-block;margin-right:6px;">Published</label></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-small">Save Item</button>
+              <button type="button" class="btn btn-ghost btn-small" id="cancelGalleryForm">Cancel</button>
+            </div>
+          </form>
+        </div>
+        <div class="panel">
+          <table><thead><tr><th>Title</th><th>Category</th><th>Description</th><th>Status</th><th></th></tr></thead>
+          <tbody id="galleryTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="tab-panel hidden" id="tab-faq">
+        <div class="main-head">
+          <div><h2>FAQ</h2><p>Questions shown in the FAQ accordion, grouped by topic.</p></div>
+          <button class="btn btn-primary btn-small" id="addFaqBtn">+ Add FAQ</button>
+        </div>
+        <div class="panel hidden" id="faqFormPanel">
+          <h3 id="faqFormTitle">Add FAQ</h3>
+          <form id="faqForm">
+            <input type="hidden" id="faqId">
+            <div class="form-grid">
+              <div class="form-field"><label>Topic *</label>
+                <select id="faqTopic">
+                  <option value="courses">Courses</option>
+                  <option value="registration">Registration</option>
+                  <option value="certificates">Certificates</option>
+                  <option value="schedule">Schedule</option>
+                  <option value="fees">Fees</option>
+                  <option value="online">Online Learning</option>
+                </select>
+              </div>
+              <div class="form-field"><label>Order</label><input id="faqOrder" type="number" value="0"></div>
+              <div class="form-field full"><label>Question *</label><input id="faqQuestion" required maxlength="300"></div>
+              <div class="form-field full"><label>Answer *</label><textarea id="faqAnswer" required maxlength="1500"></textarea></div>
+              <div class="form-field full"><label>Question (Arabic)</label><input id="faqQuestionAr" dir="rtl" maxlength="300"></div>
+              <div class="form-field full"><label>Answer (Arabic)</label><textarea id="faqAnswerAr" dir="rtl" maxlength="1500"></textarea></div>
+              <div class="form-field"><label><input type="checkbox" id="faqPublished" checked style="width:auto;display:inline-block;margin-right:6px;">Published</label></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-small">Save FAQ</button>
+              <button type="button" class="btn btn-ghost btn-small" id="cancelFaqForm">Cancel</button>
+            </div>
+          </form>
+        </div>
+        <div class="panel">
+          <table><thead><tr><th>Topic</th><th>Question</th><th>Status</th><th></th></tr></thead>
+          <tbody id="faqTable"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <!-- CONTACT MESSAGES -->
+      <section class="tab-panel hidden" id="tab-contact">
+        <div class="main-head"><div><h2>Contact Messages</h2><p>Submissions from the site's Contact form.</p></div></div>
+        <div class="panel">
+          <table><thead><tr><th>Name</th><th>Email / Phone</th><th>Course</th><th>Message</th><th>Date</th><th>Status</th><th></th></tr></thead>
+          <tbody id="contactTable"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <!-- NEWSLETTER -->
+      <section class="tab-panel hidden" id="tab-newsletter">
+        <div class="main-head">
+          <div><h2>Newsletter Subscribers</h2><p>Emails collected from the footer signup form.</p></div>
+          <a href="/api/newsletter/export.csv" class="btn btn-ghost btn-small">Export CSV</a>
+        </div>
+        <div class="panel">
+          <table><thead><tr><th>Email</th><th>Subscribed</th><th></th></tr></thead>
+          <tbody id="newsletterTable"><tr class="empty-row"><td colspan="3">Loading…</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <!-- SITE SETTINGS -->
+      <section class="tab-panel hidden" id="tab-settings">
+        <div class="main-head"><div><h2>Site Settings</h2><p>Contact info, WhatsApp, social links and the About section stats — used everywhere they appear on the public site.</p></div></div>
+        <form id="settingsForm">
+          <div class="panel">
+            <h3>Contact</h3>
+            <div class="form-grid">
+              <div class="form-field"><label>Contact Email</label><input id="settingsEmail" type="email" placeholder="hello@yoursite.com"></div>
+              <div class="form-field"><label>Contact Phone (display)</label><input id="settingsPhone" placeholder="+962 7 8232 8748"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>WhatsApp</h3>
+            <div class="form-grid">
+              <div class="form-field"><label>WhatsApp Number (digits only, with country code)</label><input id="settingsWaNumber" placeholder="962782328748"></div>
+              <div class="form-field"></div>
+              <div class="form-field full"><label>Pre-filled Message</label><textarea id="settingsWaMessage" maxlength="300"></textarea></div>
+              <div class="form-field full"><label>Pre-filled Message (Arabic)</label><textarea id="settingsWaMessageAr" dir="rtl" maxlength="300"></textarea></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Social Links</h3>
+            <div class="form-grid">
+              <div class="form-field"><label>Facebook URL</label><input id="settingsFacebook" placeholder="https://facebook.com/…"></div>
+              <div class="form-field"><label>Instagram URL</label><input id="settingsInstagram" placeholder="https://instagram.com/…"></div>
+              <div class="form-field"><label>LinkedIn URL</label><input id="settingsLinkedin" placeholder="https://linkedin.com/…"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>About Section Stats</h3>
+            <div class="form-grid">
+              <div class="form-field"><label>Students</label><input id="settingsStatStudents" placeholder="500+"></div>
+              <div class="form-field"><label>Courses</label><input id="settingsStatCourses" placeholder="30+"></div>
+              <div class="form-field"><label>Projects</label><input id="settingsStatProjects" placeholder="20+"></div>
+              <div class="form-field"><label>Satisfaction</label><input id="settingsStatSatisfaction" placeholder="95%"></div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-small">Save Settings</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+function toast(msg, type='ok') {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+function esc(str) {
+  return String(str ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtDate(d) {
+  try { return new Date(d).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }); }
+  catch { return ''; }
+}
+
+async function api(path, opts = {}) {
+  const res = await fetch('/api' + path, {
+    headers: { 'Content-Type': 'application/json' },
+    ...opts,
+  });
+  let data = null;
+  try { data = await res.json(); } catch {}
+  if (!res.ok) {
+    const err = new Error((data && data.error) || 'Request failed');
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+// ---------------- Auth ----------------
+const loginScreen = $('#loginScreen');
+const appEl = $('#app');
+
+async function checkAuth() {
+  try {
+    const me = await api('/auth/me');
+    $('#whoUser').textContent = me.username;
+    loginScreen.style.display = 'none';
+    appEl.style.display = 'block';
+    loadAll();
+  } catch {
+    loginScreen.style.display = 'flex';
+    appEl.style.display = 'none';
+  }
+}
+
+$('#loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errEl = $('#loginError');
+  errEl.textContent = '';
+  const btn = $('#loginBtn');
+  btn.disabled = true;
+  try {
+    const data = await api('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ username: $('#loginUser').value.trim(), password: $('#loginPass').value }),
+    });
+    $('#whoUser').textContent = data.username;
+    loginScreen.style.display = 'none';
+    appEl.style.display = 'block';
+    loadAll();
+  } catch (err) {
+    errEl.textContent = err.message || 'Login failed.';
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+$('#logoutBtn').addEventListener('click', async () => {
+  try { await api('/auth/logout', { method: 'POST' }); } catch {}
+  location.reload();
+});
+
+// ---------------- Tabs ----------------
+$$('.nav-item[data-tab]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    $$('.nav-item[data-tab]').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    $$('.tab-panel').forEach((p) => p.classList.add('hidden'));
+    $('#tab-' + btn.dataset.tab).classList.remove('hidden');
+  });
+});
+
+// ---------------- Load everything ----------------
+let cache = { courses: [], testimonials: [], gallery: [], faq: [], contact: [], newsletter: [] };
+
+async function loadAll() {
+  await Promise.all([loadCourses(), loadTestimonials(), loadGallery(), loadFaq(), loadContact(), loadNewsletter(), loadSettings()]);
+  renderDashboard();
+}
+
+function renderDashboard() {
+  $('#statCourses').textContent = cache.courses.length;
+  $('#statTestimonials').textContent = cache.testimonials.length;
+  $('#statGallery').textContent = cache.gallery.length;
+  $('#statUnread').textContent = cache.contact.filter((m) => !m.read).length;
+  $('#statSubs').textContent = cache.newsletter.length;
+
+  const rows = cache.contact.slice(0, 6).map((m) => `
+    <tr>
+      <td>${esc(m.name)}</td>
+      <td class="muted">${esc(m.course || '—')}</td>
+      <td class="msg-preview">${esc(m.message).slice(0, 80)}${m.message.length > 80 ? '…' : ''}</td>
+      <td class="muted">${fmtDate(m.createdAt)}</td>
+    </tr>`).join('');
+  $('#dashRecentMsgs').innerHTML = rows || '<tr class="empty-row"><td colspan="4">No messages yet.</td></tr>';
+}
+
+// ---------------- Courses ----------------
+async function loadCourses() {
+  cache.courses = await api('/courses?all=1');
+  $('#countCourses').textContent = cache.courses.length;
+  const rows = cache.courses.map((c) => `
+    <tr>
+      <td>${c.icon || ''} ${esc(c.title)}</td>
+      <td class="muted">${esc(c.duration)}</td>
+      <td><span class="pill pill-${c.difficulty.toLowerCase()}">${c.difficulty}</span></td>
+      <td>${c.published ? '<span class="pill pill-read" style="color:var(--ok);background:rgba(61,220,151,.12);">Published</span>' : '<span class="pill pill-read">Draft</span>'}</td>
+      <td class="row-actions">
+        <button class="icon-btn" data-edit-course="${c._id}" aria-label="Edit"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+        <button class="icon-btn danger" data-del-course="${c._id}" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      </td>
+    </tr>`).join('');
+  $('#coursesTable').innerHTML = rows || '<tr class="empty-row"><td colspan="5">No courses yet. Add your first one.</td></tr>';
+}
+
+function resetCourseForm() {
+  $('#courseForm').reset();
+  $('#courseId').value = '';
+  $('#courseFormTitle').textContent = 'Add Course';
+  $('#coursePublished').checked = true;
+}
+
+$('#addCourseBtn').addEventListener('click', () => {
+  resetCourseForm();
+  $('#courseFormPanel').classList.remove('hidden');
+});
+$('#cancelCourseForm').addEventListener('click', () => $('#courseFormPanel').classList.add('hidden'));
+
+$('#coursesTable').addEventListener('click', async (e) => {
+  const editId = e.target.closest('[data-edit-course]')?.dataset.editCourse;
+  const delId = e.target.closest('[data-del-course]')?.dataset.delCourse;
+  if (editId) {
+    const c = cache.courses.find((x) => x._id === editId);
+    if (!c) return;
+    $('#courseId').value = c._id;
+    $('#courseTitle').value = c.title;
+    $('#courseIcon').value = c.icon || '';
+    $('#courseDescription').value = c.description;
+    $('#courseTitleAr').value = c.titleAr || '';
+    $('#courseDescriptionAr').value = c.descriptionAr || '';
+    $('#courseDuration').value = c.duration;
+    $('#courseDurationAr').value = c.durationAr || '';
+    $('#courseDifficulty').value = c.difficulty;
+    $('#courseCategory').value = c.category || 'programming';
+    $('#courseOrder').value = c.order || 0;
+    $('#coursePublished').checked = !!c.published;
+    $('#courseFormTitle').textContent = 'Edit Course';
+    $('#courseFormPanel').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (delId) {
+    if (!confirm('Delete this course? This cannot be undone.')) return;
+    try {
+      await api('/courses/' + delId, { method: 'DELETE' });
+      toast('Course deleted.');
+      loadCourses();
+    } catch (err) { toast(err.message, 'err'); }
+  }
+});
+
+$('#courseForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = $('#courseId').value;
+  const payload = {
+    title: $('#courseTitle').value.trim(),
+    icon: $('#courseIcon').value.trim(),
+    description: $('#courseDescription').value.trim(),
+    titleAr: $('#courseTitleAr').value.trim(),
+    descriptionAr: $('#courseDescriptionAr').value.trim(),
+    duration: $('#courseDuration').value.trim(),
+    durationAr: $('#courseDurationAr').value.trim(),
+    difficulty: $('#courseDifficulty').value,
+    category: $('#courseCategory').value,
+    order: Number($('#courseOrder').value) || 0,
+    published: $('#coursePublished').checked,
+  };
+  try {
+    if (id) await api('/courses/' + id, { method: 'PUT', body: JSON.stringify(payload) });
+    else await api('/courses', { method: 'POST', body: JSON.stringify(payload) });
+    toast('Course saved.');
+    $('#courseFormPanel').classList.add('hidden');
+    loadCourses();
+  } catch (err) { toast(err.message, 'err'); }
+});
+
+// ---------------- Testimonials ----------------
+async function loadTestimonials() {
+  cache.testimonials = await api('/testimonials?all=1');
+  $('#countTestimonials').textContent = cache.testimonials.length;
+  const rows = cache.testimonials.map((t) => `
+    <tr>
+      <td>${esc(t.name)}</td>
+      <td class="muted">${esc(t.role)}</td>
+      <td class="msg-preview">${esc(t.quote).slice(0, 70)}${t.quote.length > 70 ? '…' : ''}</td>
+      <td>${t.published ? '<span class="pill" style="color:var(--ok);background:rgba(61,220,151,.12);">Published</span>' : '<span class="pill pill-read">Draft</span>'}</td>
+      <td class="row-actions">
+        <button class="icon-btn" data-edit-testimonial="${t._id}" aria-label="Edit"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+        <button class="icon-btn danger" data-del-testimonial="${t._id}" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      </td>
+    </tr>`).join('');
+  $('#testimonialsTable').innerHTML = rows || '<tr class="empty-row"><td colspan="5">No testimonials yet.</td></tr>';
+}
+
+function resetTestimonialForm() {
+  $('#testimonialForm').reset();
+  $('#testimonialId').value = '';
+  $('#testimonialRating').value = 5;
+  $('#testimonialFormTitle').textContent = 'Add Testimonial';
+  $('#testimonialPublished').checked = true;
+}
+$('#addTestimonialBtn').addEventListener('click', () => {
+  resetTestimonialForm();
+  $('#testimonialFormPanel').classList.remove('hidden');
+});
+$('#cancelTestimonialForm').addEventListener('click', () => $('#testimonialFormPanel').classList.add('hidden'));
+
+$('#testimonialsTable').addEventListener('click', async (e) => {
+  const editId = e.target.closest('[data-edit-testimonial]')?.dataset.editTestimonial;
+  const delId = e.target.closest('[data-del-testimonial]')?.dataset.delTestimonial;
+  if (editId) {
+    const t = cache.testimonials.find((x) => x._id === editId);
+    if (!t) return;
+    $('#testimonialId').value = t._id;
+    $('#testimonialName').value = t.name;
+    $('#testimonialRole').value = t.role;
+    $('#testimonialQuote').value = t.quote;
+    $('#testimonialRoleAr').value = t.roleAr || '';
+    $('#testimonialQuoteAr').value = t.quoteAr || '';
+    $('#testimonialRating').value = t.rating;
+    $('#testimonialInitials').value = t.avatarInitials || '';
+    $('#testimonialOrder').value = t.order || 0;
+    $('#testimonialPublished').checked = !!t.published;
+    $('#testimonialFormTitle').textContent = 'Edit Testimonial';
+    $('#testimonialFormPanel').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (delId) {
+    if (!confirm('Delete this testimonial?')) return;
+    try {
+      await api('/testimonials/' + delId, { method: 'DELETE' });
+      toast('Testimonial deleted.');
+      loadTestimonials();
+    } catch (err) { toast(err.message, 'err'); }
+  }
+});
+
+$('#testimonialForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = $('#testimonialId').value;
+  const payload = {
+    name: $('#testimonialName').value.trim(),
+    role: $('#testimonialRole').value.trim(),
+    quote: $('#testimonialQuote').value.trim(),
+    roleAr: $('#testimonialRoleAr').value.trim(),
+    quoteAr: $('#testimonialQuoteAr').value.trim(),
+    rating: Number($('#testimonialRating').value) || 5,
+    avatarInitials: $('#testimonialInitials').value.trim(),
+    order: Number($('#testimonialOrder').value) || 0,
+    published: $('#testimonialPublished').checked,
+  };
+  try {
+    if (id) await api('/testimonials/' + id, { method: 'PUT', body: JSON.stringify(payload) });
+    else await api('/testimonials', { method: 'POST', body: JSON.stringify(payload) });
+    toast('Testimonial saved.');
+    $('#testimonialFormPanel').classList.add('hidden');
+    loadTestimonials();
+  } catch (err) { toast(err.message, 'err'); }
+});
+
+// ---------------- Gallery ----------------
+async function loadGallery() {
+  cache.gallery = await api('/gallery?all=1');
+  $('#countGallery').textContent = cache.gallery.length;
+  const rows = cache.gallery.map((g) => `
+    <tr>
+      <td>${esc(g.title)}</td>
+      <td class="muted">${esc(g.category || '—')}</td>
+      <td class="msg-preview">${esc(g.description).slice(0, 70)}${g.description.length > 70 ? '…' : ''}</td>
+      <td>${g.published ? '<span class="pill" style="color:var(--ok);background:rgba(61,220,151,.12);">Published</span>' : '<span class="pill pill-read">Draft</span>'}</td>
+      <td class="row-actions">
+        <button class="icon-btn" data-edit-gallery="${g._id}" aria-label="Edit"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+        <button class="icon-btn danger" data-del-gallery="${g._id}" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      </td>
+    </tr>`).join('');
+  $('#galleryTable').innerHTML = rows || '<tr class="empty-row"><td colspan="5">No gallery items yet.</td></tr>';
+}
+
+function resetGalleryForm() {
+  $('#galleryForm').reset();
+  $('#galleryId').value = '';
+  $('#galleryFormTitle').textContent = 'Add Gallery Item';
+  $('#galleryPublished').checked = true;
+}
+$('#addGalleryBtn').addEventListener('click', () => {
+  resetGalleryForm();
+  $('#galleryFormPanel').classList.remove('hidden');
+});
+$('#cancelGalleryForm').addEventListener('click', () => $('#galleryFormPanel').classList.add('hidden'));
+
+$('#galleryTable').addEventListener('click', async (e) => {
+  const editId = e.target.closest('[data-edit-gallery]')?.dataset.editGallery;
+  const delId = e.target.closest('[data-del-gallery]')?.dataset.delGallery;
+  if (editId) {
+    const g = cache.gallery.find((x) => x._id === editId);
+    if (!g) return;
+    $('#galleryId').value = g._id;
+    $('#galleryTitle').value = g.title;
+    $('#galleryCategory').value = g.category || '';
+    $('#galleryDescription').value = g.description;
+    $('#galleryTitleAr').value = g.titleAr || '';
+    $('#galleryDescriptionAr').value = g.descriptionAr || '';
+    $('#galleryImageUrl').value = g.imageUrl || '';
+    $('#galleryOrder').value = g.order || 0;
+    $('#galleryPublished').checked = !!g.published;
+    $('#galleryFormTitle').textContent = 'Edit Gallery Item';
+    $('#galleryFormPanel').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (delId) {
+    if (!confirm('Delete this gallery item?')) return;
+    try {
+      await api('/gallery/' + delId, { method: 'DELETE' });
+      toast('Gallery item deleted.');
+      loadGallery();
+    } catch (err) { toast(err.message, 'err'); }
+  }
+});
+
+$('#galleryForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = $('#galleryId').value;
+  const payload = {
+    title: $('#galleryTitle').value.trim(),
+    category: $('#galleryCategory').value.trim(),
+    description: $('#galleryDescription').value.trim(),
+    titleAr: $('#galleryTitleAr').value.trim(),
+    descriptionAr: $('#galleryDescriptionAr').value.trim(),
+    imageUrl: $('#galleryImageUrl').value.trim(),
+    order: Number($('#galleryOrder').value) || 0,
+    published: $('#galleryPublished').checked,
+  };
+  try {
+    if (id) await api('/gallery/' + id, { method: 'PUT', body: JSON.stringify(payload) });
+    else await api('/gallery', { method: 'POST', body: JSON.stringify(payload) });
+    toast('Gallery item saved.');
+    $('#galleryFormPanel').classList.add('hidden');
+    loadGallery();
+  } catch (err) { toast(err.message, 'err'); }
+});
+
+// ---------------- FAQ ----------------
+const FAQ_TOPIC_LABELS = {
+  courses: 'Courses', registration: 'Registration', certificates: 'Certificates',
+  schedule: 'Schedule', fees: 'Fees', online: 'Online Learning',
+};
+
+async function loadFaq() {
+  cache.faq = await api('/faq?all=1');
+  $('#countFaq').textContent = cache.faq.length;
+  const rows = cache.faq.map((f) => `
+    <tr>
+      <td class="muted">${esc(FAQ_TOPIC_LABELS[f.topic] || f.topic)}</td>
+      <td class="msg-preview">${esc(f.question)}</td>
+      <td>${f.published ? '<span class="pill" style="color:var(--ok);background:rgba(61,220,151,.12);">Published</span>' : '<span class="pill pill-read">Draft</span>'}</td>
+      <td class="row-actions">
+        <button class="icon-btn" data-edit-faq="${f._id}" aria-label="Edit"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+        <button class="icon-btn danger" data-del-faq="${f._id}" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      </td>
+    </tr>`).join('');
+  $('#faqTable').innerHTML = rows || '<tr class="empty-row"><td colspan="4">No FAQ items yet.</td></tr>';
+}
+
+function resetFaqForm() {
+  $('#faqForm').reset();
+  $('#faqId').value = '';
+  $('#faqFormTitle').textContent = 'Add FAQ';
+  $('#faqPublished').checked = true;
+}
+$('#addFaqBtn').addEventListener('click', () => {
+  resetFaqForm();
+  $('#faqFormPanel').classList.remove('hidden');
+});
+$('#cancelFaqForm').addEventListener('click', () => $('#faqFormPanel').classList.add('hidden'));
+
+$('#faqTable').addEventListener('click', async (e) => {
+  const editId = e.target.closest('[data-edit-faq]')?.dataset.editFaq;
+  const delId = e.target.closest('[data-del-faq]')?.dataset.delFaq;
+  if (editId) {
+    const f = cache.faq.find((x) => x._id === editId);
+    if (!f) return;
+    $('#faqId').value = f._id;
+    $('#faqTopic').value = f.topic;
+    $('#faqOrder').value = f.order || 0;
+    $('#faqQuestion').value = f.question;
+    $('#faqAnswer').value = f.answer;
+    $('#faqQuestionAr').value = f.questionAr || '';
+    $('#faqAnswerAr').value = f.answerAr || '';
+    $('#faqPublished').checked = !!f.published;
+    $('#faqFormTitle').textContent = 'Edit FAQ';
+    $('#faqFormPanel').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (delId) {
+    if (!confirm('Delete this FAQ item?')) return;
+    try {
+      await api('/faq/' + delId, { method: 'DELETE' });
+      toast('FAQ item deleted.');
+      loadFaq();
+    } catch (err) { toast(err.message, 'err'); }
+  }
+});
+
+$('#faqForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = $('#faqId').value;
+  const payload = {
+    topic: $('#faqTopic').value,
+    order: Number($('#faqOrder').value) || 0,
+    question: $('#faqQuestion').value.trim(),
+    answer: $('#faqAnswer').value.trim(),
+    questionAr: $('#faqQuestionAr').value.trim(),
+    answerAr: $('#faqAnswerAr').value.trim(),
+    published: $('#faqPublished').checked,
+  };
+  try {
+    if (id) await api('/faq/' + id, { method: 'PUT', body: JSON.stringify(payload) });
+    else await api('/faq', { method: 'POST', body: JSON.stringify(payload) });
+    toast('FAQ saved.');
+    $('#faqFormPanel').classList.add('hidden');
+    loadFaq();
+  } catch (err) { toast(err.message, 'err'); }
+});
+
+// ---------------- Site Settings ----------------
+async function loadSettings() {
+  const s = await api('/settings');
+  cache.settings = s;
+  $('#settingsEmail').value = s.contactEmail || '';
+  $('#settingsPhone').value = s.contactPhone || '';
+  $('#settingsWaNumber').value = s.whatsappNumber || '';
+  $('#settingsWaMessage').value = s.whatsappMessage || '';
+  $('#settingsWaMessageAr').value = s.whatsappMessageAr || '';
+  $('#settingsFacebook').value = (s.social && s.social.facebook) || '';
+  $('#settingsInstagram').value = (s.social && s.social.instagram) || '';
+  $('#settingsLinkedin').value = (s.social && s.social.linkedin) || '';
+  $('#settingsStatStudents').value = (s.stats && s.stats.students) || '';
+  $('#settingsStatCourses').value = (s.stats && s.stats.courses) || '';
+  $('#settingsStatProjects').value = (s.stats && s.stats.projects) || '';
+  $('#settingsStatSatisfaction').value = (s.stats && s.stats.satisfaction) || '';
+}
+
+$('#settingsForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const payload = {
+    contactEmail: $('#settingsEmail').value.trim(),
+    contactPhone: $('#settingsPhone').value.trim(),
+    whatsappNumber: $('#settingsWaNumber').value.trim(),
+    whatsappMessage: $('#settingsWaMessage').value.trim(),
+    whatsappMessageAr: $('#settingsWaMessageAr').value.trim(),
+    social: {
+      facebook: $('#settingsFacebook').value.trim(),
+      instagram: $('#settingsInstagram').value.trim(),
+      linkedin: $('#settingsLinkedin').value.trim(),
+    },
+    stats: {
+      students: $('#settingsStatStudents').value.trim(),
+      courses: $('#settingsStatCourses').value.trim(),
+      projects: $('#settingsStatProjects').value.trim(),
+      satisfaction: $('#settingsStatSatisfaction').value.trim(),
+    },
+  };
+  try {
+    await api('/settings', { method: 'PUT', body: JSON.stringify(payload) });
+    toast('Settings saved.');
+  } catch (err) { toast(err.message, 'err'); }
+});
+
+// ---------------- Contact messages ----------------
+async function loadContact() {
+  cache.contact = await api('/contact');
+  $('#countContact').textContent = cache.contact.filter((m) => !m.read).length;
+  const rows = cache.contact.map((m) => `
+    <tr>
+      <td>${esc(m.name)}</td>
+      <td class="muted">${esc(m.email)}${m.phone ? '<br>' + esc(m.phone) : ''}</td>
+      <td class="muted">${esc(m.course || '—')}</td>
+      <td class="msg-preview">${esc(m.message)}</td>
+      <td class="muted">${fmtDate(m.createdAt)}</td>
+      <td>${m.read ? '<span class="pill pill-read">Read</span>' : '<span class="pill pill-unread">Unread</span>'}</td>
+      <td class="row-actions">
+        <button class="icon-btn" data-toggle-msg="${m._id}" aria-label="Toggle read"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="icon-btn danger" data-del-msg="${m._id}" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      </td>
+    </tr>`).join('');
+  $('#contactTable').innerHTML = rows || '<tr class="empty-row"><td colspan="7">No messages yet.</td></tr>';
+}
+
+$('#contactTable').addEventListener('click', async (e) => {
+  const toggleId = e.target.closest('[data-toggle-msg]')?.dataset.toggleMsg;
+  const delId = e.target.closest('[data-del-msg]')?.dataset.delMsg;
+  if (toggleId) {
+    try { await api('/contact/' + toggleId + '/read', { method: 'PATCH' }); loadContact(); }
+    catch (err) { toast(err.message, 'err'); }
+  }
+  if (delId) {
+    if (!confirm('Delete this message?')) return;
+    try { await api('/contact/' + delId, { method: 'DELETE' }); toast('Message deleted.'); loadContact(); }
+    catch (err) { toast(err.message, 'err'); }
+  }
+});
+
+// ---------------- Newsletter ----------------
+async function loadNewsletter() {
+  cache.newsletter = await api('/newsletter');
+  $('#countNewsletter').textContent = cache.newsletter.length;
+  const rows = cache.newsletter.map((s) => `
+    <tr>
+      <td>${esc(s.email)}</td>
+      <td class="muted">${fmtDate(s.createdAt)}</td>
+      <td class="row-actions">
+        <button class="icon-btn danger" data-del-sub="${s._id}" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      </td>
+    </tr>`).join('');
+  $('#newsletterTable').innerHTML = rows || '<tr class="empty-row"><td colspan="3">No subscribers yet.</td></tr>';
+}
+
+$('#newsletterTable').addEventListener('click', async (e) => {
+  const delId = e.target.closest('[data-del-sub]')?.dataset.delSub;
+  if (delId) {
+    if (!confirm('Remove this subscriber?')) return;
+    try { await api('/newsletter/' + delId, { method: 'DELETE' }); toast('Subscriber removed.'); loadNewsletter(); }
+    catch (err) { toast(err.message, 'err'); }
+  }
+});
+
+checkAuth();
+</script>
+</body>
+</html>

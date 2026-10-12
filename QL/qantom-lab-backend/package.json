@@ -1,0 +1,29 @@
+{
+  "name": "qantom-lab-backend",
+  "version": "1.0.0",
+  "description": "Qantom Lab -- Node.js + Express + MongoDB backend and admin panel",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node seed/seed.js"
+  },
+  "dependencies": {
+    "connect-mongo": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
+    "helmet": "^7.1.0",
+    "mongoose": "^8.6.0",
+    "morgan": "^1.10.0",
+    "validator": "^13.12.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
